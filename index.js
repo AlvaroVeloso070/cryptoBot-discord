@@ -1,12 +1,28 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const config = require("./config.json");
+const {sendEmbedScheduled} = require("./commands/embed");
+const {request} = require('./commands/requestAPI');
+const cron = require('node-cron');
 
+var metadata;
+var latestQuotes;
 
 
 bot.on("ready", () => {
     console.log(`Bot foi iniciado com sucesso!`);
     bot.user.setActivity (`Estou em desenvolvimento.`);
+
+    //latestQuotes = request(config.latestQuotes,config);
+    metadata = request(config.metadata,config);
+    console.log(metadata);
+
+    cron.schedule("30 * * * *", () => {
+        let itemsID = config.itemsID.split(',');
+        for (let x = 0; x <itemsID.length; x++){
+            sendEmbedScheduled(latestQuotes,metadata,itemsID[x]);
+        }
+    });
 });
 
 bot.on("guildCreate", guild => {
@@ -26,35 +42,15 @@ bot.on("message", async message =>{
     const comando = args.shift().toLowerCase();
 
     if (comando === "teste"){
-        message.channel.send("Funcionando :pleading_face:")
+        let itemsID = config.itemsID.split(',');
+        sendEmbedScheduled(request(config.latestQuotes),request(config.metadata),itemsID[0]);
     }
     if (comando === "embed"){
-        let autor = message.author;
-                let embed = new Discord.MessageEmbed;
-                embed.setAuthor(`Essa parte fica em cima do titulo`, `https://coinmarketcap.com` /*url de alguma coisa*/);
-                embed.setTitle(`Título da embed`);
-                embed.setDescription(`Descrição da embed`);
-                embed.setFooter(`Rodapé`);
-                embed.setColor("RANDOM");
-                embed.setImage("https://cdn.spacemoney.com.br/upload/dn_arquivo/2019/09/blockchain_bitcoin_criptomoeda.jpg"); //imagem grande
-                embed.setThumbnail("https://logosmarcas.net/wp-content/uploads/2020/08/Bitcoin-Emblema.png"); //imagenzinha da direita
-                embed.setTimestamp();
-                embed.addFields(
-                    {
-                        name: "nome field1",
-                        value: "ausdu",
-                        inline: true
-                    },
-                    {
-                        name: "nome field2",
-                        value: "ausdu",
-                        inline: true
-                    }
-                );
-        message.channel.send(autor, embed);
-        }
+        sendEmbed(message);
+    }
     
 
 });
-
 bot.login(config.token);
+module.exports = {latestQuotes, metadata};
+

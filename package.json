@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.5.3"
+    "discord.js": "^12.5.3",
+    "node-cron": "^3.0.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   },
   "description": ""
 }
