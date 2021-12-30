@@ -1,7 +1,7 @@
 {
     "prefix": "&",
-    "token": "OTI1MTYyNDAwOTU5ODI4MDA4.YcpGoQ.76SseaNv5gRaJN0QIFYZmCHQr7I",
-    "API_KEY" : "3c409e2f-a292-4b19-86e7-ce725ebfe7d1",
+    "token": "",
+    "API_KEY" : "",
     "domain" : "https://pro-api.coinmarketcap.com",
     "latestQuotes" : "/v1/cryptocurrency/quotes/latest",
     "metadata" : "/v1/cryptocurrency/info",
